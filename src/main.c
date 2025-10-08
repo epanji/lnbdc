@@ -3,7 +3,7 @@
 
 typedef struct {
   double orbit;
-  char *name;
+  char name[16];
 } sat_t;
 
 sat_t sats[] = {
