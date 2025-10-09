@@ -1,11 +1,5 @@
-#include <math.h>
-#include <stdio.h>
-#include <string.h>
-
-typedef struct {
-  double orbit;
-  char name[16];
-} sat_t;
+/* main.c */
+#include "lnbd.h"
 
 sat_t sats[] = {
     {057.0, "NSS 12"},      {064.2, "Intelsat 906"}, {066.0, "Intelsat 17"},
@@ -76,12 +70,6 @@ sat_t find_sat_by_name(const char *name) {
   }
   return alt;
 }
-
-#define find_sat(x)                                                            \
-  _Generic((x),                                                                \
-      char *: find_sat_by_name,                                                \
-      const char *: find_sat_by_name,                                          \
-      double_t: find_sat_by_orbit)(x)
 
 int main() {
   printf("sin  30   : %f\n", tsin(30));
