@@ -18,29 +18,9 @@ sat_t sats[] = {
     {154.0, "JCSAT 2A"},    {159.0, "ABS 6"},        {166.0, "Intelsat 19"},
     {169.0, "Intelsat 8"},  {172.0, "Eutelsat 172A"}};
 
-double deg_to_rad(int deg) {
-  double rad = (deg % 360) * (M_PI / 180);
-  return rad;
-}
-
-double tsin(int deg) {
-  double result = sin(deg_to_rad(deg));
-  return result;
-}
-
-double tcos(int deg) {
-  double result = cos(deg_to_rad(deg));
-  return result;
-}
-
-double ft_to_cm(double ft) {
-  double result = 30.48 * ft;
-  return result;
-}
-
 sat_t find_sat_by_orbit(double_t arg) {
   size_t len = sizeof(sats) / sizeof(sat_t);
-  sat_t result, alt;
+  sat_t result, alt = sats[0];
   int i;
   for (i = 0; i < len; i++) {
     result = sats[i];
@@ -55,10 +35,10 @@ sat_t find_sat_by_orbit(double_t arg) {
   return alt;
 }
 
-sat_t find_sat_by_name(const char *name) {
+sat_t find_sat_by_name(str_t name) {
   size_t lname = strlen(name);
   size_t len = sizeof(sats) / sizeof(sat_t);
-  sat_t result, alt;
+  sat_t result, alt = sats[0];
   int i;
   for (i = 0; i < len; i++) {
     result = sats[i];
@@ -69,6 +49,42 @@ sat_t find_sat_by_name(const char *name) {
     }
   }
   return alt;
+}
+
+double deg_to_rad(double_t deg) {
+  double rad = fmod(deg, 360) * (M_PI / 180);
+  return rad;
+}
+
+double tsin(double_t deg) {
+  double result = sin(deg_to_rad(deg));
+  return result;
+}
+
+double tcos(double_t deg) {
+  double result = cos(deg_to_rad(deg));
+  return result;
+}
+
+double ft_to_cm(double_t ft) {
+  double result = 30.48 * ft;
+  return result;
+}
+
+double focal_length(double_t diameter, double_t depth) {
+  double result = (diameter * diameter) / (16 * depth);
+  return result;
+}
+
+double radius(double_t diameter, double_t depth) {
+  double result = (depth / 2) + (diameter * diameter) / (8 * depth);
+  return result;
+}
+
+double distance_two_lnb(double_t from, double_t to, double_t radius,
+                        double_t focal) {
+  double result = deg_to_rad(fabs(to - from)) * (radius - focal);
+  return result;
 }
 
 int main() {
@@ -93,5 +109,10 @@ int main() {
   sat_t n = find_sat("palapa");
   printf("orbit : %.1f\n", n.orbit);
   printf("name  : '%s'\n", n.name);
+  printf("focal     : %.2f cm\n", focal_length(ft_to_cm(7), 30.48));
+  printf("radius    : %.2f cm\n", radius(ft_to_cm(7), 30.48));
+  printf("distance  : %.2f cm\n",
+         distance_two_lnb(108.2, 113.0, radius(ft_to_cm(7), 30.48),
+                          focal_length(ft_to_cm(7), 30.48)));
   return 0;
 }
