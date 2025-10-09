@@ -1,5 +1,6 @@
 #include <math.h>
 #include <stdio.h>
+#include <string.h>
 
 typedef struct {
   double orbit;
@@ -23,13 +24,64 @@ sat_t sats[] = {
     {154.0, "JCSAT 2A"},    {159.0, "ABS 6"},        {166.0, "Intelsat 19"},
     {169.0, "Intelsat 8"},  {172.0, "Eutelsat 172A"}};
 
-double deg_to_rad(int deg) { return (deg % 360) * (M_PI / 180); }
+double deg_to_rad(int deg) {
+  double rad = (deg % 360) * (M_PI / 180);
+  return rad;
+}
 
-double tsin(int deg) { return sin(deg_to_rad(deg)); }
+double tsin(int deg) {
+  double result = sin(deg_to_rad(deg));
+  return result;
+}
 
-double tcos(int deg) { return cos(deg_to_rad(deg)); }
+double tcos(int deg) {
+  double result = cos(deg_to_rad(deg));
+  return result;
+}
 
-float ft_to_cm(float ft) { return 30.48 * ft; }
+double ft_to_cm(double ft) {
+  double result = 30.48 * ft;
+  return result;
+}
+
+sat_t find_sat_by_orbit(double_t arg) {
+  size_t len = sizeof(sats) / sizeof(sat_t);
+  sat_t result, alt;
+  int i;
+  for (i = 0; i < len; i++) {
+    result = sats[i];
+    if (result.orbit == arg) {
+      return result;
+    } else if (result.orbit < arg) {
+      if (alt.orbit < result.orbit) {
+        alt = result;
+      }
+    }
+  }
+  return alt;
+}
+
+sat_t find_sat_by_name(const char *name) {
+  size_t lname = strlen(name);
+  size_t len = sizeof(sats) / sizeof(sat_t);
+  sat_t result, alt;
+  int i;
+  for (i = 0; i < len; i++) {
+    result = sats[i];
+    if ((strncasecmp(result.name, name, lname)) == 0) {
+      return result;
+    } else if ((strncasecmp(result.name, name, 1)) == 0) {
+      alt = result;
+    }
+  }
+  return alt;
+}
+
+#define find_sat(x)                                                            \
+  _Generic((x),                                                                \
+      char *: find_sat_by_name,                                                \
+      const char *: find_sat_by_name,                                          \
+      double_t: find_sat_by_orbit)(x)
 
 int main() {
   printf("sin  30   : %f\n", tsin(30));
@@ -40,5 +92,18 @@ int main() {
   printf("ft2cm 9.2 : %f\n", ft_to_cm(9.2));
   printf("sat_t 0   : {%.1f, '%s'}\n", sats[0].orbit, sats[0].name);
   printf("sat_t 1   : {%.1f, '%s'}\n", sats[1].orbit, sats[1].name);
+  printf("length sat_t : %d\n", (int)sizeof(sat_t));
+  sat_t x = find_sat_by_orbit(108.9);
+  printf("orbit : %.1f\n", x.orbit);
+  printf("name  : '%s'\n", x.name);
+  sat_t y = find_sat_by_name("palapa");
+  printf("orbit : %.1f\n", y.orbit);
+  printf("name  : '%s'\n", y.name);
+  sat_t m = find_sat(108.9);
+  printf("orbit : %.1f\n", m.orbit);
+  printf("name  : '%s'\n", m.name);
+  sat_t n = find_sat("palapa");
+  printf("orbit : %.1f\n", n.orbit);
+  printf("name  : '%s'\n", n.name);
   return 0;
 }
