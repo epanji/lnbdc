@@ -14,4 +14,6 @@ typedef const char *str_t;
   _Generic((x),                                                                \
       char *: find_sat_by_name,                                                \
       const char *: find_sat_by_name,                                          \
-      double_t: find_sat_by_orbit)(x)
+      int: find_sat_by_orbit,                                                  \
+      float: find_sat_by_orbit,                                                \
+      double: find_sat_by_orbit)(x)

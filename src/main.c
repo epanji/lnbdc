@@ -95,7 +95,10 @@ void show_satellites() {
   int i;
   for (i = 0; i < lsats; i++) {
     tmp = sats[i];
-    printf("\n{%.1f, '%s'}", tmp.orbit, tmp.name);
+    if (i != 0) {
+      printf("\n");
+    }
+    printf("{%.1f, '%s'}", tmp.orbit, tmp.name);
   }
 }
 
@@ -115,7 +118,7 @@ int main() {
   sat_t y = find_sat_by_name("palapa");
   printf("orbit : %.1f\n", y.orbit);
   printf("name  : '%s'\n", y.name);
-  sat_t m = find_sat(108.9);
+  sat_t m = find_sat(109);
   printf("orbit : %.1f\n", m.orbit);
   printf("name  : '%s'\n", m.name);
   sat_t n = find_sat("palapa");
@@ -127,6 +130,6 @@ int main() {
          distance_two_lnb(108.2, 113.0, radius(ft_to_cm(7), 30.48),
                           focal_length(ft_to_cm(7), 30.48)));
   show_satellites();
-  printf("\n"); 
+  printf("\n");
   return 0;
 }
