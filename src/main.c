@@ -2,13 +2,13 @@
 #include "lnbd.h"
 
 sat_t sats[] = {
-    {057.0, "NSS 12"},      {064.2, "Intelsat 906"}, {066.0, "Intelsat 17"},
-    {068.5, "Intelsat 20"}, {070.5, "Eutelsat 70B"}, {075.0, "ABS 2"},
-    {076.5, "Apstar 7"},    {078.5, "Thaicom 5"},    {078.5, "Thaicom 6"},
-    {087.5, "ChinaSat 12"}, {088.0, "ST 2"},         {091.5, "Measat 3"},
-    {091.5, "Measat 3a"},   {091.5, "Measat 3B"},    {093.5, "G Sat 17"},
-    {093.5, "Insat 4B"},    {095.0, "NSS 6"},        {096.5, "Express AM33"},
-    {098.0, "ChinaSat 11"}, {100.5, "AsiaSat 5"},    {105.5, "AsiaSat 7"},
+    {57.0, "NSS 12"},       {64.2, "Intelsat 906"},  {66.0, "Intelsat 17"},
+    {68.5, "Intelsat 20"},  {70.5, "Eutelsat 70B"},  {75.0, "ABS 2"},
+    {76.5, "Apstar 7"},     {78.5, "Thaicom 5"},     {78.5, "Thaicom 6"},
+    {87.5, "ChinaSat 12"},  {88.0, "ST 2"},          {91.5, "Measat 3"},
+    {91.5, "Measat 3a"},    {91.5, "Measat 3B"},     {93.5, "G Sat 17"},
+    {93.5, "Insat 4B"},     {95.0, "NSS 6"},         {96.5, "Express AM33"},
+    {98.0, "ChinaSat 11"},  {100.5, "AsiaSat 5"},    {105.5, "AsiaSat 7"},
     {108.2, "SES 7"},       {108.2, "SES 9"},        {108.2, "Telkom 4"},
     {110.5, "ChinaSat 10"}, {113.0, "Palapa D"},     {115.5, "ChinaSat 6B"},
     {118.0, "Telkom 3S"},   {119.5, "Thaicom 4"},    {120.0, "Thaicom 7"},
@@ -19,36 +19,38 @@ sat_t sats[] = {
     {169.0, "Intelsat 8"},  {172.0, "Eutelsat 172A"}};
 
 sat_t find_sat_by_orbit(double_t arg) {
-  size_t len = sizeof(sats) / sizeof(sat_t);
-  sat_t result, alt = sats[0];
+  size_t lsats = sizeof(sats) / sizeof(sat_t);
+  sat_t tmp, result = sats[0];
   int i;
-  for (i = 0; i < len; i++) {
-    result = sats[i];
-    if (result.orbit == arg) {
-      return result;
-    } else if (result.orbit < arg) {
-      if (alt.orbit < result.orbit) {
-        alt = result;
+  for (i = 0; i < lsats; i++) {
+    tmp = sats[i];
+    if (tmp.orbit == arg) {
+      result = tmp;
+      break;
+    } else if (tmp.orbit < arg) {
+      if (result.orbit < tmp.orbit) {
+        result = tmp;
       }
     }
   }
-  return alt;
+  return result;
 }
 
 sat_t find_sat_by_name(str_t name) {
   size_t lname = strlen(name);
-  size_t len = sizeof(sats) / sizeof(sat_t);
-  sat_t result, alt = sats[0];
+  size_t lsats = sizeof(sats) / sizeof(sat_t);
+  sat_t tmp, result = sats[0];
   int i;
-  for (i = 0; i < len; i++) {
-    result = sats[i];
-    if ((strncasecmp(result.name, name, lname)) == 0) {
-      return result;
-    } else if ((strncasecmp(result.name, name, 1)) == 0) {
-      alt = result;
+  for (i = 0; i < lsats; i++) {
+    tmp = sats[i];
+    if ((strncasecmp(tmp.name, name, lname)) == 0) {
+      result = tmp;
+      break;
+    } else if ((strncasecmp(tmp.name, name, 1)) == 0) {
+      result = tmp;
     }
   }
-  return alt;
+  return result;
 }
 
 double deg_to_rad(double_t deg) {
