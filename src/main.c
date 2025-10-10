@@ -89,6 +89,16 @@ double distance_two_lnb(double_t from, double_t to, double_t radius,
   return result;
 }
 
+void show_satellites() {
+  size_t lsats = sizeof(sats) / sizeof(sat_t);
+  sat_t tmp;
+  int i;
+  for (i = 0; i < lsats; i++) {
+    tmp = sats[i];
+    printf("\n{%.1f, '%s'}", tmp.orbit, tmp.name);
+  }
+}
+
 int main() {
   printf("sin  30   : %f\n", tsin(30));
   printf("sin -30   : %f\n", tsin(-30));
@@ -116,5 +126,7 @@ int main() {
   printf("distance  : %.2f cm\n",
          distance_two_lnb(108.2, 113.0, radius(ft_to_cm(7), 30.48),
                           focal_length(ft_to_cm(7), 30.48)));
+  show_satellites();
+  printf("\n"); 
   return 0;
 }
