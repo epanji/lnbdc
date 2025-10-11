@@ -73,6 +73,11 @@ double ft_to_cm(double_t ft) {
   return result;
 }
 
+double m_to_cm(double_t m) {
+  double result = 100 * m;
+  return result;
+}
+
 double focal_length(double_t diameter, double_t depth) {
   double result = (diameter * diameter) / (16 * depth);
   return result;
@@ -102,7 +107,34 @@ void show_satellites() {
   }
 }
 
-int main() {
+double str_to_cm(char *arg) {
+  char *unit;
+  double_t result = strtod(arg, &unit);
+  while (isspace(*unit)) {
+    unit++;
+  }
+  if ((strncasecmp(unit, "ft", 2) == 0) ||
+      (strncasecmp(unit, "foot", 4) == 0) ||
+      (strncasecmp(unit, "feet", 4) == 0)) {
+    result = ft_to_cm(result);
+  } else if ((strncasecmp(unit, "m", 1) == 0) ||
+             (strncasecmp(unit, "meter", 5) == 0)) {
+    result = m_to_cm(result);
+  }
+  return result;
+}
+
+sat_t str_to_sat(str_t str) {
+  sat_t result;
+  if (strtod(str, NULL)) {
+    result = find_sat(strtod(str, NULL));
+  } else {
+    result = find_sat(str);
+  }
+  return result;
+}
+
+int test() {
   printf("sin  30   : %f\n", tsin(30));
   printf("sin -30   : %f\n", tsin(-30));
   printf("cos  30   : %f\n", tcos(30));
@@ -132,4 +164,40 @@ int main() {
   show_satellites();
   printf("\n");
   return 0;
+}
+
+int main(int argc, char *argv[]) {
+  if (argc < 5) {
+    // show_help();
+    return 1;
+  }
+  int i;
+  int len = argc - 3;
+  double diameter, depth;
+  sat_t focus;
+  sat_t others[len];
+  for (i = 1; i < argc; i++) {
+    switch (i) {
+    case 1:
+      diameter = str_to_cm(argv[i]);
+      break;
+    case 2:
+      depth = str_to_cm(argv[i]);
+      break;
+    case 3:
+      focus = str_to_sat(argv[i]);
+      others[0] = focus;
+      break;
+    default:
+      others[i - 3] = str_to_sat(argv[i]);
+      break;
+    }
+  }
+  printf("%.2f\n", diameter);
+  printf("%.2f\n", depth);
+  // printf("%s\n", focus.name);
+  for (i = 0; i < len; i++) {
+    printf("%s\n", others[i].name);
+  }
+  return 0; // test();
 }
