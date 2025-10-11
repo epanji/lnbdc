@@ -172,7 +172,7 @@ int cmpsatp(const void *sat0, const void *sat1) {
   y = *(sat_t *)sat1;
   if (x.orbit == y.orbit) {
     return 0;
-  } else if (x.orbit < y.orbit) {
+  } else if (x.orbit > y.orbit) {
     return -1;
   }
   return 1;
@@ -185,8 +185,8 @@ int main(int argc, char *argv[]) {
   }
   int i;
   int len = argc - 3;
-  double diameter, depth;
-  sat_t focus;
+  double diameter, depth, rdius, focal;
+  sat_t focus, x, y;
   sat_t others[len];
   for (i = 1; i < argc; i++) {
     switch (i) {
@@ -205,15 +205,28 @@ int main(int argc, char *argv[]) {
       break;
     }
   }
-  printf("%.2f\n", diameter);
-  printf("%.2f\n", depth);
-  // printf("%s\n", focus.name);
+  printf("LNB distance calculation:\n\n");
+  rdius = radius(diameter, depth);
+  focal = focal_length(diameter, depth);
+  printf("  %-12s : %.2f\n", "Diameter", diameter);
+  printf("  %-12s : %.2f\n", "Depth", depth);
+  printf("  %-12s : %.2f\n", "Radius", rdius);
+  printf("  %-12s : %.2f\n", "Focal length", focal);
+  printf("  %-12s : %s\n", "Focus", focus.name);
+  printf("\n");
   qsort(&others, sizeof(others) / sizeof(sat_t), sizeof(sat_t), cmpsatp);
+  printf("  %-16s | %-16s | %-9s\n", "From (West)", "To (East)", "Distance (cm)");
+  printf("  ---------------- | ---------------- | -------------\n");
   for (i = 0; i < len; i++) {
-    printf("'%s' - '%s' => %.2f\n", others[i].name, focus.name,
-           distance_two_lnb(others[i].orbit, focus.orbit,
-                            radius(diameter, depth),
-                            focal_length(diameter, depth)));
+    if (focus.orbit > others[i].orbit) {
+      x = focus;
+      y = others[i];
+    } else {
+      x = others[i];
+      y = focus;
+    }
+    printf("  %-16s | %-16s | %-9.2f cm\n", x.name, y.name,
+           distance_two_lnb(x.orbit, y.orbit, rdius, focal));
   }
   return 0; // test();
 }
