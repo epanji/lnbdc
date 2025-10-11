@@ -166,6 +166,18 @@ int test() {
   return 0;
 }
 
+int cmpsatp(const void *sat0, const void *sat1) {
+  sat_t x, y;
+  x = *(sat_t *)sat0;
+  y = *(sat_t *)sat1;
+  if (x.orbit == y.orbit) {
+    return 0;
+  } else if (x.orbit < y.orbit) {
+    return -1;
+  }
+  return 1;
+}
+
 int main(int argc, char *argv[]) {
   if (argc < 5) {
     // show_help();
@@ -196,8 +208,12 @@ int main(int argc, char *argv[]) {
   printf("%.2f\n", diameter);
   printf("%.2f\n", depth);
   // printf("%s\n", focus.name);
+  qsort(&others, sizeof(others) / sizeof(sat_t), sizeof(sat_t), cmpsatp);
   for (i = 0; i < len; i++) {
-    printf("%s\n", others[i].name);
+    printf("'%s' - '%s' => %.2f\n", others[i].name, focus.name,
+           distance_two_lnb(others[i].orbit, focus.orbit,
+                            radius(diameter, depth),
+                            focal_length(diameter, depth)));
   }
   return 0; // test();
 }
