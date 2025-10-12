@@ -1,5 +1,6 @@
 /* main.c */
 #include "lnbdc.h"
+#include <getopt.h>
 
 sat_t sats[] = {
     {57.0, "NSS 12"},       {64.2, "Intelsat 906"},  {66.0, "Intelsat 17"},
@@ -135,42 +136,30 @@ void show_satellites() {
 }
 
 void show_brief() {
-  printf("usage:\n");
-  printf("  lnbdc [option] ");
+  printf("lnbdc [option] ");
   printf("<diameter> <depth> <focus-satellite> ");
   printf("<other-satellite> [more-satellite...]\n");
 }
 
-int test() {
-  printf("sin  30   : %f\n", tsin(30));
-  printf("sin -30   : %f\n", tsin(-30));
-  printf("cos  30   : %f\n", tcos(30));
-  printf("cos -30   : %f\n", tcos(-30));
-  printf("ft2cm 9   : %f\n", ft_to_cm(9));
-  printf("ft2cm 9.2 : %f\n", ft_to_cm(9.2));
-  printf("sat_t 0   : {%.1f, '%s'}\n", sats[0].orbit, sats[0].name);
-  printf("sat_t 1   : {%.1f, '%s'}\n", sats[1].orbit, sats[1].name);
-  printf("length sat_t : %d\n", (int)sizeof(sat_t));
-  sat_t x = find_sat_by_orbit(108.9);
-  printf("orbit : %.1f\n", x.orbit);
-  printf("name  : '%s'\n", x.name);
-  sat_t y = find_sat_by_name("palapa");
-  printf("orbit : %.1f\n", y.orbit);
-  printf("name  : '%s'\n", y.name);
-  sat_t m = find_sat(109);
-  printf("orbit : %.1f\n", m.orbit);
-  printf("name  : '%s'\n", m.name);
-  sat_t n = find_sat("palapa");
-  printf("orbit : %.1f\n", n.orbit);
-  printf("name  : '%s'\n", n.name);
-  printf("focal     : %.2f cm\n", focal_length(ft_to_cm(7), 30.48));
-  printf("radius    : %.2f cm\n", radius(ft_to_cm(7), 30.48));
-  printf("distance  : %.2f cm\n",
-         distance_two_lnb(108.2, 113.0, radius(ft_to_cm(7), 30.48),
-                          focal_length(ft_to_cm(7), 30.48)));
-  show_satellites();
+void show_help() {
+  printf("lnbdc is LNB distance calculation for parabola.\n");
   printf("\n");
-  return 0;
+  printf("usage:\n  ");
+  show_brief();
+  printf("\n");
+  printf("options:\n");
+  printf("%4s %-11s %s\n", "h,", "help", "show this messages.");
+  printf("%4s %-11s %s\n", "  ", "list", "show all satellites.");
+  printf("\n");
+  printf("arguments:\n");
+  printf("  %-14s %s\n", "diameter",
+         "parabola diameter based on units, assumed in cm if units are omitted. "
+         "(ft, m, cm)");
+  printf("  %-14s %s\n", "depth",
+         "parabola depth based on units, assumed in cm if units are omitted. "
+         "(ft, m, cm)");
+  printf("  %-14s %s\n", "satellite",
+         "satellite orbit or name for focus and the others.");
 }
 
 int cmpsatp(const void *sat0, const void *sat1) {
@@ -186,25 +175,60 @@ int cmpsatp(const void *sat0, const void *sat1) {
 }
 
 int main(int argc, char *argv[]) {
-  if (argc < 5) {
+  int c;
+  int digit_optind = 0;
+  while (1) {
+    int this_option_optind = optind ? optind : 1;
+    int option_index = 0;
+    static struct option long_options[] = {{"help", no_argument, 0, 'h'},
+                                           {"list", no_argument, 0, 'l'},
+                                           {0, 0, 0, 0}};
+    c = getopt_long(argc, argv, "h", long_options, &option_index);
+    if (c == -1) {
+      break;
+    }
+    switch (c) {
+    case 'h':
+      show_help();
+      return 0;
+    case 'l':
+      show_satellites();
+      printf("\n");
+      return 0;
+    default:
+      printf("usage: ");
+      show_brief();
+      return 1;
+    }
+  }
+  int i = 0;
+  int nargc = 1 + argc - optind;
+  char *nargv[nargc];
+  nargv[i] = argv[i];
+  if (optind < argc) {
+    while (optind < argc) {
+      nargv[++i] = argv[optind++];
+    }
+  }
+  if (nargc < 5) {
+    printf("usage: ");
     show_brief();
     return 1;
   }
-  int i;
-  int len = argc - 3;
+  int len = nargc - 3;
   double diameter, depth, rdius, focal;
   sat_t focus, x, y;
   sat_t others[len];
-  for (i = 1; i < argc; i++) {
+  for (i = 1; i < nargc; i++) {
     switch (i) {
     case 1:
-      diameter = str_to_cm(argv[i]);
+      diameter = str_to_cm(nargv[i]);
       break;
     case 2:
-      depth = str_to_cm(argv[i]);
+      depth = str_to_cm(nargv[i]);
       break;
     case 3:
-      focus = str_to_sat(argv[i]);
+      focus = str_to_sat(nargv[i]);
       others[0] = focus;
       break;
     default:
@@ -222,7 +246,8 @@ int main(int argc, char *argv[]) {
   printf("  %-12s : %s\n", "Focus", focus.name);
   printf("\n");
   qsort(&others, sizeof(others) / sizeof(sat_t), sizeof(sat_t), cmpsatp);
-  printf("  %-16s | %-16s | %-9s\n", "From (West)", "To (East)", "Distance (cm)");
+  printf("  %-16s | %-16s | %-9s\n", "From (West)", "To (East)",
+         "Distance (cm)");
   printf("  ---------------- | ---------------- | -------------\n");
   for (i = 0; i < len; i++) {
     if (focus.orbit > others[i].orbit) {
@@ -235,5 +260,5 @@ int main(int argc, char *argv[]) {
     printf("  %-16s | %-16s | %-9.2f cm\n", x.name, y.name,
            distance_two_lnb(x.orbit, y.orbit, rdius, focal));
   }
-  return 0; // test();
+  return 0;
 }
