@@ -202,37 +202,37 @@ int main(int argc, char *argv[]) {
     }
   }
   int i = 0;
-  int nargc = 1 + argc - optind;
-  char *nargv[nargc];
-  nargv[i] = argv[i];
+  int wo_argc = 1 + argc - optind;
+  char *wo_argv[wo_argc];
+  wo_argv[i] = argv[i];
   if (optind < argc) {
     while (optind < argc) {
-      nargv[++i] = argv[optind++];
+      wo_argv[++i] = argv[optind++];
     }
   }
-  if (nargc < 5) {
+  if (wo_argc < 5) {
     printf("usage: ");
     show_brief();
     return 1;
   }
-  int len = nargc - 3;
+  int len = wo_argc - 3;
   double diameter, depth, rdius, focal;
   sat_t focus, x, y;
   sat_t others[len];
-  for (i = 1; i < nargc; i++) {
+  for (i = 1; i < wo_argc; i++) {
     switch (i) {
     case 1:
-      diameter = str_to_cm(nargv[i]);
+      diameter = str_to_cm(wo_argv[i]);
       break;
     case 2:
-      depth = str_to_cm(nargv[i]);
+      depth = str_to_cm(wo_argv[i]);
       break;
     case 3:
-      focus = str_to_sat(nargv[i]);
+      focus = str_to_sat(wo_argv[i]);
       others[0] = focus;
       break;
     default:
-      others[i - 3] = str_to_sat(argv[i]);
+      others[i - 3] = str_to_sat(wo_argv[i]);
       break;
     }
   }
