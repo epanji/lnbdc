@@ -215,10 +215,10 @@ int main(int argc, char *argv[]) {
   printf("LNB distance calculation:\n\n");
   rdius = radius(diameter, depth);
   focal = focal_length(diameter, depth);
-  printf("  %-12s : %.2f\n", "Diameter", diameter);
-  printf("  %-12s : %.2f\n", "Depth", depth);
-  printf("  %-12s : %.2f\n", "Radius", rdius);
-  printf("  %-12s : %.2f\n", "Focal length", focal);
+  printf("  %-12s : %-7.2f cm\n", "Diameter", diameter);
+  printf("  %-12s : %-7.2f cm\n", "Depth", depth);
+  printf("  %-12s : %-7.2f cm\n", "Radius", rdius);
+  printf("  %-12s : %-7.2f cm\n", "Focal length", focal);
   printf("  %-12s : %s\n", "Focus", focus.name);
   printf("\n");
   qsort(&others, sizeof(others) / sizeof(sat_t), sizeof(sat_t), cmpsatp);
