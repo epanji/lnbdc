@@ -1,4 +1,4 @@
-/* lnbd.h */
+/* lnbdc.h */
 #pragma once
 
 #include <ctype.h>

@@ -1,5 +1,5 @@
 /* main.c */
-#include "lnbd.h"
+#include "lnbdc.h"
 
 sat_t sats[] = {
     {57.0, "NSS 12"},       {64.2, "Intelsat 906"},  {66.0, "Intelsat 17"},
