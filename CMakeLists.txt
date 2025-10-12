@@ -4,6 +4,7 @@ project(lnbdc LANGUAGES C)
 
 set(CMAKE_C_STANDARD 17)
 
-add_executable(lnbdc src/main.c)
+add_library(dc STATIC src/lnbdc.c)
 
-target_link_libraries(lnbdc m)
+add_executable(lnbdc src/main.c)
+target_link_libraries(lnbdc dc m)
