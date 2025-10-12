@@ -94,19 +94,6 @@ double distance_two_lnb(double_t from, double_t to, double_t radius,
   return result;
 }
 
-void show_satellites() {
-  size_t lsats = sizeof(sats) / sizeof(sat_t);
-  sat_t tmp;
-  int i;
-  for (i = 0; i < lsats; i++) {
-    tmp = sats[i];
-    if (i != 0) {
-      printf("\n");
-    }
-    printf("{%.1f, '%s'}", tmp.orbit, tmp.name);
-  }
-}
-
 double str_to_cm(char *arg) {
   char *unit;
   double_t result = strtod(arg, &unit);
@@ -132,6 +119,26 @@ sat_t str_to_sat(str_t str) {
     result = find_sat(str);
   }
   return result;
+}
+
+void show_satellites() {
+  size_t lsats = sizeof(sats) / sizeof(sat_t);
+  sat_t tmp;
+  int i;
+  for (i = 0; i < lsats; i++) {
+    tmp = sats[i];
+    if (i != 0) {
+      printf("\n");
+    }
+    printf("{%.1f, '%s'}", tmp.orbit, tmp.name);
+  }
+}
+
+void show_brief() {
+  printf("usage:\n");
+  printf("  lnbdc [option] ");
+  printf("<diameter> <depth> <focus-satellite> ");
+  printf("<other-satellite> [more-satellite...]\n");
 }
 
 int test() {
@@ -180,7 +187,7 @@ int cmpsatp(const void *sat0, const void *sat1) {
 
 int main(int argc, char *argv[]) {
   if (argc < 5) {
-    // show_help();
+    show_brief();
     return 1;
   }
   int i;
