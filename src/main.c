@@ -18,7 +18,7 @@ void show_help() {
   printf("\n");
   printf("options:\n");
   printf("%5s %-10s %s\n", "-h,", "--help", "show this messages.");
-  printf("%5s %-10s %s\n", "  ", "--list", "show all satellites.");
+  printf("%5s %-10s %s\n", "", "--list", "show all satellites.");
   printf("\n");
   printf("arguments:\n");
   printf(
@@ -32,6 +32,7 @@ void show_help() {
          "satellite orbit or name for focus and the others.");
 }
 
+/* TODO load from sats.data */
 int main(int argc, char *argv[]) {
   int c;
   int digit_optind = 0;
