@@ -1,0 +1,18 @@
+# TEST
+add_test(NAME find_sat_by_orbit COMMAND lnbdcTest 1)
+add_test(NAME find_sat_by_name COMMAND lnbdcTest 2)
+add_test(NAME find_sat COMMAND lnbdcTest 3)
+add_test(NAME str_to_sat COMMAND lnbdcTest 4)
+add_test(NAME deg_to_rad COMMAND lnbdcTest 5)
+add_test(NAME trigonometri_sin COMMAND lnbdcTest 6)
+add_test(NAME trigonometri_cos COMMAND lnbdcTest 7)
+add_test(NAME ft_to_cm COMMAND lnbdcTest 8)
+add_test(NAME m_to_cm COMMAND lnbdcTest 9)
+add_test(NAME str_to_cm COMMAND lnbdcTest 10)
+add_test(NAME focal_length COMMAND lnbdcTest 11)
+add_test(NAME radius COMMAND lnbdcTest 12)
+add_test(NAME distance_two_lnb COMMAND lnbdcTest 13)
+add_test(NAME cmpsatp COMMAND lnbdcTest 14)
+
+add_executable(lnbdcTest lnbdcTest.c)
+target_link_libraries(lnbdcTest dc m)

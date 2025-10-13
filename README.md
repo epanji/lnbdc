@@ -30,7 +30,7 @@ cmake --build ../build && ../build/lnbdc
 
 ```sh
 
-src (main*) » valgrind -s --leak-check=full ../build/lnbdc 7ft 1ft 'merah putih' 'asiasat 7' 'asiasat 5' 'koreasat 5a' 'chinasat 6e'
+src (main) » valgrind -s --leak-check=full ../build/lnbdc 7ft 1ft 'merah putih' 'asiasat 7' 'asiasat 5' 'koreasat 5a' 'chinasat 6e'
 ==26779== Memcheck, a memory error detector
 ==26779== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
 ==26779== Using Valgrind-3.24.0 and LibVEX; rerun with -h for copyright info
@@ -59,5 +59,21 @@ LNB distance calculation:
 ==26779== All heap blocks were freed -- no leaks are possible
 ==26779== 
 ==26779== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+```
+
+### Test from ``src``
+
+```sh
+
+ctest --test-dir ../build ../
+
+```
+
+### Verbose test from ``src``
+
+```sh
+
+ctest --test-dir ../build --verbose ../
 
 ```
