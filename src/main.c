@@ -17,8 +17,8 @@ void show_help() {
   show_brief();
   printf("\n");
   printf("options:\n");
-  printf("%4s %-11s %s\n", "h,", "help", "show this messages.");
-  printf("%4s %-11s %s\n", "  ", "list", "show all satellites.");
+  printf("%5s %-10s %s\n", "-h,", "--help", "show this messages.");
+  printf("%5s %-10s %s\n", "  ", "--list", "show all satellites.");
   printf("\n");
   printf("arguments:\n");
   printf(
