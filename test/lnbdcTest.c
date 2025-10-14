@@ -138,18 +138,34 @@ int test_10() {
   char b[16];
   char c[16];
   char d[16];
+  char e[16];
+  char f[16];
+  char g[16];
+  char h[16];
   sprintf(a, "%.2f", str_to_cm("1.1ft"));
   sprintf(b, "%.2f", str_to_cm("1.1m"));
   sprintf(c, "%.2f", str_to_cm("1.1 ft"));
   sprintf(d, "%.2f", str_to_cm("1.1 m"));
+  sprintf(e, "%.2f", str_to_cm("1 foot"));
+  sprintf(f, "%.2f", str_to_cm("2 feet"));
+  sprintf(g, "%.2f", str_to_cm("1 meter"));
+  sprintf(h, "%.2f", str_to_cm("2 meters"));
   printf("a = %s\n", a);
   printf("b = %s\n", b);
   printf("c = %s\n", c);
   printf("d = %s\n", d);
+  printf("e = %s\n", e);
+  printf("f = %s\n", f);
+  printf("g = %s\n", g);
+  printf("h = %s\n", h);
   if (strcmp(a, "33.53") != 0) return 1;
   if (strcmp(b, "110.00") != 0) return 1;
   if (strcmp(c, "33.53") != 0) return 1;
   if (strcmp(d, "110.00") != 0) return 1;
+  if (strcmp(e, "30.48") != 0) return 1;
+  if (strcmp(f, "60.96") != 0) return 1;
+  if (strcmp(g, "100.00") != 0) return 1;
+  if (strcmp(h, "200.00") != 0) return 1;
   return 0;
 }
 
