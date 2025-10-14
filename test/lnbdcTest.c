@@ -195,6 +195,23 @@ int test_14() {
   return 0;
 }
 
+int test_15() {
+  /* literal string (char *) is immutable */
+  char a[] = "   abc";
+  char b[] = "def   ";
+  char c[] = "   ghi   ";
+  trim_space_left(a);
+  trim_space_left(b);
+  trim_space_left(c);
+  printf("a = '%s'\n", a);
+  printf("b = '%s'\n", b);
+  printf("c = '%s'\n", c);
+  if (strcmp(a, "abc") != 0) return 1;
+  if (strcmp(b, "def   ") != 0) return 1;
+  if (strcmp(c, "ghi   ") != 0) return 1;
+  return 0;
+}
+
 int main(int argc, char *argv[]) {
   int test = 1;
   if (argc > 1) {
@@ -240,6 +257,9 @@ int main(int argc, char *argv[]) {
       break;
     case 14:
       test = test_14();
+      break;
+    case 15:
+      test = test_15();
       break;
     default:
       test = 1;

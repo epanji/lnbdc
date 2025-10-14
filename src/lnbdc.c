@@ -108,6 +108,17 @@ double distance_two_lnb(double_t from, double_t to, double_t radius,
   return result;
 }
 
+int trim_space_left(char *arg) {
+  int istrim = 0;
+  int i = 0;
+  while (isspace(arg[i])) {
+    istrim = 1;
+    i++;
+  }
+  memmove(arg, arg + i, strlen(arg));
+  return istrim;
+}
+
 double str_to_cm(char *arg) {
   char *unit;
   double_t result = strtod(arg, &unit);

@@ -46,3 +46,5 @@ sat_t str_to_sat(str_t str);
 void show_satellites();
 
 int cmpsatp(const void *sat0, const void *sat1);
+
+int trim_space_left(char *arg);

@@ -13,6 +13,7 @@ add_test(NAME focal_length COMMAND lnbdcTest 11)
 add_test(NAME radius COMMAND lnbdcTest 12)
 add_test(NAME distance_two_lnb COMMAND lnbdcTest 13)
 add_test(NAME cmpsatp COMMAND lnbdcTest 14)
+add_test(NAME trim_space_left COMMAND lnbdcTest 15)
 
 add_executable(lnbdcTest lnbdcTest.c)
 target_link_libraries(lnbdcTest dc m)
