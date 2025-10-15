@@ -172,6 +172,21 @@ sat_t str_to_sat(str_t str) {
   return result;
 }
 
+
+int sat_from_line(sat_t *sat, char *str) {
+  char *untrim;
+  double orbit = strtod(str, &untrim);
+  if (orbit >= 1) {
+    char name[strlen(untrim)+1];
+    strcpy(name, untrim);
+    trim_space_both(name);
+    sat->orbit = orbit;
+    strncpy(sat->name, name, sizeof(sat->name) - 1);
+    return 1;
+  }
+  return 0;
+}
+
 void show_satellites() {
   size_t lsats = sizeof(sats) / sizeof(sat_t);
   sat_t tmp;

@@ -262,6 +262,19 @@ int test_17() {
   return 0;
 }
 
+int test_18() {
+  char *x = "108.1                Merah Putih                       ";
+  char *y = "146.0             Nusantara Satu                       ";
+  sat_t a, b;
+  sat_from_line(&a, x);
+  sat_from_line(&b, y);
+  printf("a = '%s'\n", a.name);
+  printf("b = '%s'\n", b.name);
+  if (strcmp(a.name, "Merah Putih") != 0) return 1;
+  if (strcmp(b.name, "Nusantara Satu") != 0) return 1;
+  return 0;
+}
+
 int main(int argc, char *argv[]) {
   int test = 1;
   if (argc > 1) {
@@ -316,6 +329,9 @@ int main(int argc, char *argv[]) {
       break;
     case 17:
       test = test_17();
+      break;
+    case 18:
+      test = test_18();
       break;
     default:
       test = 1;
