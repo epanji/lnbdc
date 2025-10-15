@@ -119,6 +119,21 @@ int trim_space_left(char *arg) {
   return istrim;
 }
 
+int trim_space_right(char *arg) {
+  int i = 0;
+  int x = 0;
+  while (arg[i] != '\0') {
+    if (! isspace(arg[i])) {
+      x = i;
+    }
+    i++;
+  }
+  x++;
+  char* end = arg + x;
+  memmove(end, arg + strlen(arg), 1);
+  return i != x;
+}
+
 double str_to_cm(char *arg) {
   char *unit;
   double_t result = strtod(arg, &unit);
