@@ -134,6 +134,17 @@ int trim_space_right(char *arg) {
   return i != x;
 }
 
+int trim_space_both(char *arg) {
+  int istrim = 0;
+  if (trim_space_left(arg)) {
+    istrim = 1;
+  }
+  if (trim_space_right(arg)) {
+    istrim = 1;
+  }
+  return istrim;
+}
+
 double str_to_cm(char *arg) {
   char *unit;
   double_t result = strtod(arg, &unit);

@@ -15,6 +15,7 @@ add_test(NAME distance_two_lnb COMMAND lnbdcTest 13)
 add_test(NAME cmpsatp COMMAND lnbdcTest 14)
 add_test(NAME trim_space_left COMMAND lnbdcTest 15)
 add_test(NAME trim_space_right COMMAND lnbdcTest 16)
+add_test(NAME trim_space_both COMMAND lnbdcTest 17)
 
 add_executable(lnbdcTest lnbdcTest.c)
 target_link_libraries(lnbdcTest dc m)

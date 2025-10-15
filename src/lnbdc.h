@@ -50,3 +50,5 @@ int cmpsatp(const void *sat0, const void *sat1);
 int trim_space_left(char *arg);
 
 int trim_space_right(char *arg);
+
+int trim_space_both(char *arg);
