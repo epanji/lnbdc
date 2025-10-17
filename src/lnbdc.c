@@ -172,7 +172,6 @@ sat_t str_to_sat(str_t str) {
   return result;
 }
 
-
 int sat_from_line(sat_t *sat, char *str) {
   char *untrim;
   double orbit = strtod(str, &untrim);
@@ -185,6 +184,25 @@ int sat_from_line(sat_t *sat, char *str) {
     return 1;
   }
   return 0;
+}
+
+int sats_from_file(sat_t (*arptr)[], char *filename) {
+  int l_line = 96; /* sizeof(sat_t) + head & trail space */
+  int size = 0;
+  FILE *file = fopen(filename, "r");
+  char *line = malloc(l_line);
+  sat_t *ptr = *arptr;
+  if (file != NULL) {
+    while (fgets(line, l_line, file)) {
+      if (sat_from_line(ptr, line)) {
+        ptr++;
+        size++;
+      }
+    }
+  }
+  free(line);
+  fclose(file);
+  return size;
 }
 
 void show_satellites() {

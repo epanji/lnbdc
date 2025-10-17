@@ -275,6 +275,26 @@ int test_18() {
   return 0;
 }
 
+int test_19() {
+  char *ftmp = "lnbdc_test_19.txt";
+  FILE *file = fopen(ftmp, "w");
+  fprintf(file, "110 satu\n"
+		"120    dua\n"
+	        "130    tiga   \n");
+  fclose(file);
+  sat_t (*arrptr)[] = malloc(3*(sizeof(sat_t)));
+  int size = sats_from_file(arrptr, ftmp);
+  sat_t *arr = *arrptr;
+  for (int i = 0; i < size; i++) {
+    printf("%s\n",arr[i].name);
+  }
+  if (strcmp("satu", arr[0].name) != 0) return 1;
+  if (strcmp("dua", arr[1].name) != 0) return 1;
+  if (strcmp("tiga", arr[2].name) != 0) return 1;
+  free(arrptr);
+  return 0;
+}
+
 int main(int argc, char *argv[]) {
   int test = 1;
   if (argc > 1) {
@@ -332,6 +352,9 @@ int main(int argc, char *argv[]) {
       break;
     case 18:
       test = test_18();
+      break;
+    case 19:
+      test = test_19();
       break;
     default:
       test = 1;

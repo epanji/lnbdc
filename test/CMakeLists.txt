@@ -17,6 +17,7 @@ add_test(NAME trim_space_left COMMAND lnbdcTest 15)
 add_test(NAME trim_space_right COMMAND lnbdcTest 16)
 add_test(NAME trim_space_both COMMAND lnbdcTest 17)
 add_test(NAME sat_from_line COMMAND lnbdcTest 18)
+add_test(NAME sats_from_file COMMAND lnbdcTest 19)
 
 add_executable(lnbdcTest lnbdcTest.c)
 target_link_libraries(lnbdcTest dc m)

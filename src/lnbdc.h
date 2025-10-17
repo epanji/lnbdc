@@ -54,3 +54,5 @@ int trim_space_right(char *arg);
 int trim_space_both(char *arg);
 
 int sat_from_line(sat_t *sat, char *str);
+
+int sats_from_file(sat_t (*arptr)[], char *filename);
