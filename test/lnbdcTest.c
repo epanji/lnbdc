@@ -4,9 +4,9 @@
 #include <string.h>
 
 int test_1() {
-  sat_t a = find_sat_by_orbit(146.0);
-  sat_t b = find_sat_by_orbit(146);
-  sat_t c = find_sat_by_orbit(147);
+  sat_t a = find_sat_by_orbit(146.0, NULL, 0);
+  sat_t b = find_sat_by_orbit(146, NULL, 0);
+  sat_t c = find_sat_by_orbit(147, NULL, 0);
   printf("a = %s\n", a.name);
   printf("b = %s\n", b.name);
   printf("c = %s\n", c.name);
@@ -17,9 +17,9 @@ int test_1() {
 }
 
 int test_2() {
-  sat_t a = find_sat_by_name("Nusantara Satu");
-  sat_t b = find_sat_by_name("Nusantara");
-  sat_t c = find_sat_by_name("nusantara");
+  sat_t a = find_sat_by_name("Nusantara Satu", NULL, 0);
+  sat_t b = find_sat_by_name("Nusantara", NULL, 0);
+  sat_t c = find_sat_by_name("nusantara", NULL, 0);
   printf("a = %s\n", a.name);
   printf("b = %s\n", b.name);
   printf("c = %s\n", c.name);
@@ -30,12 +30,12 @@ int test_2() {
 }
 
 int test_3() {
-  sat_t a = find_sat_by_orbit(146.0);
-  sat_t b = find_sat_by_orbit(146);
-  sat_t c = find_sat_by_orbit(147);
-  sat_t d = find_sat_by_name("Nusantara Satu");
-  sat_t e = find_sat_by_name("Nusantara");
-  sat_t f = find_sat_by_name("nusantara");
+  sat_t a = find_sat_by_orbit(146.0, NULL, 0);
+  sat_t b = find_sat_by_orbit(146, NULL, 0);
+  sat_t c = find_sat_by_orbit(147, NULL, 0);
+  sat_t d = find_sat_by_name("Nusantara Satu", NULL, 0);
+  sat_t e = find_sat_by_name("Nusantara", NULL, 0);
+  sat_t f = find_sat_by_name("nusantara", NULL, 0);
   printf("a = %s\n", a.name);
   printf("b = %s\n", b.name);
   printf("c = %s\n", c.name);
@@ -52,12 +52,12 @@ int test_3() {
 }
 
 int test_4() {
-  sat_t a = str_to_sat("146.0");
-  sat_t b = str_to_sat("146");
-  sat_t c = str_to_sat("147");
-  sat_t d = str_to_sat("Nusantara Satu");
-  sat_t e = str_to_sat("Nusantara");
-  sat_t f = str_to_sat("nusantara");
+  sat_t a = str_to_sat("146.0", NULL, 0);
+  sat_t b = str_to_sat("146", NULL, 0);
+  sat_t c = str_to_sat("147", NULL, 0);
+  sat_t d = str_to_sat("Nusantara Satu", NULL, 0);
+  sat_t e = str_to_sat("Nusantara", NULL, 0);
+  sat_t f = str_to_sat("nusantara", NULL, 0);
   printf("a = %s\n", a.name);
   printf("b = %s\n", b.name);
   printf("c = %s\n", c.name);
@@ -197,17 +197,31 @@ int test_14() {
   char a[8];
   char b[8];
   char c[8];
-  sat_t s[] = {{1, "s1"}, {2, "s2"}, {3, "s3"}};
-  qsort(s, sizeof(s) / sizeof(sat_t), sizeof(sat_t), cmpsatp);
+  char d[8];
+  char e[8];
+  char f[8];
+  sat_t s[] = {{1, "s1"}, {3, "s3"}, {2, "s2"}};
+  sat_t t[] = {{1, "s1"}, {3, "s3"}, {2, "s2"}};
+  qsort(s, sizeof(s) / sizeof(sat_t), sizeof(sat_t), desc_cmpsatp);
+  qsort(t, sizeof(t) / sizeof(sat_t), sizeof(sat_t), asc_cmpsatp);
   sprintf(a, "%s", s[0].name);
   sprintf(b, "%s", s[1].name);
   sprintf(c, "%s", s[2].name);
+  sprintf(d, "%s", t[0].name);
+  sprintf(e, "%s", t[1].name);
+  sprintf(f, "%s", t[2].name);
   printf("a = %s\n", a);
   printf("b = %s\n", b);
   printf("c = %s\n", c);
+  printf("d = %s\n", d);
+  printf("e = %s\n", e);
+  printf("f = %s\n", f);
   if (strcmp(a, "s3") != 0) return 1;
   if (strcmp(b, "s2") != 0) return 1;
   if (strcmp(c, "s1") != 0) return 1;
+  if (strcmp(d, "s1") != 0) return 1;
+  if (strcmp(e, "s2") != 0) return 1;
+  if (strcmp(f, "s3") != 0) return 1;
   return 0;
 }
 
@@ -279,8 +293,8 @@ int test_19() {
   char *ftmp = "lnbdc_test_19.txt";
   FILE *file = fopen(ftmp, "w");
   fprintf(file, "110 satu\n"
-		"120    dua\n"
-	        "130    tiga   \n");
+                "120    dua\n"
+                "130    tiga   \n");
   fclose(file);
   sat_t (*arrptr)[] = malloc(3*(sizeof(sat_t)));
   int size = sats_from_file(arrptr, ftmp);

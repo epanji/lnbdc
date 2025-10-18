@@ -32,12 +32,16 @@ sat_t sats[] = {
     {166.0, "Intelsat 19"},  {169.0, "Horizons 3e"},  {172.0, "Eutelsat 172B"},
     {177.0, "NSS 9"},        {180.0, "Intelsat 18"}};
 
-sat_t find_sat_by_orbit(double_t arg) {
-  size_t lsats = sizeof(sats) / sizeof(sat_t);
-  sat_t tmp, result = sats[0];
+sat_t find_sat_by_orbit(double_t arg, sat_t (*arptr)[], int size) {
+  if (arptr == NULL) {
+    size = sizeof(sats) / sizeof(sat_t);
+    arptr = &sats;
+  }
+  sat_t *ar = *arptr;
+  sat_t tmp, result = ar[0];
   int i;
-  for (i = 0; i < lsats; i++) {
-    tmp = sats[i];
+  for (i = 0; i < size; i++) {
+    tmp = ar[i];
     if (tmp.orbit == arg) {
       result = tmp;
       break;
@@ -50,12 +54,16 @@ sat_t find_sat_by_orbit(double_t arg) {
   return result;
 }
 
-sat_t find_sat_by_name(str_t name) {
+sat_t find_sat_by_name(str_t name, sat_t (*arptr)[], int size) {
+  if (arptr == NULL) {
+    size = sizeof(sats) / sizeof(sat_t);
+    arptr = &sats;
+  }
+  sat_t *ar = *arptr;
+  sat_t tmp, result = ar[0];
   size_t lname = strlen(name);
-  size_t lsats = sizeof(sats) / sizeof(sat_t);
-  sat_t tmp, result = sats[0];
   int i;
-  for (i = 0; i < lsats; i++) {
+  for (i = 0; i < size; i++) {
     tmp = sats[i];
     if ((strncasecmp(tmp.name, name, lname)) == 0) {
       result = tmp;
@@ -123,14 +131,13 @@ int trim_space_right(char *arg) {
   int i = 0;
   int x = 0;
   while (arg[i] != '\0') {
-    if (! isspace(arg[i])) {
+    if (!isspace(arg[i])) {
       x = i;
     }
     i++;
   }
   x++;
-  char* end = arg + x;
-  memmove(end, arg + strlen(arg), 1);
+  memmove(arg + x, arg + strlen(arg), 1);
   return i != x;
 }
 
@@ -162,12 +169,12 @@ double str_to_cm(char *arg) {
   return result;
 }
 
-sat_t str_to_sat(str_t str) {
+sat_t str_to_sat(str_t str, sat_t (*arptr)[], int size) {
   sat_t result;
   if (strtod(str, NULL)) {
-    result = find_sat(strtod(str, NULL));
+    result = find_sat(strtod(str, NULL), arptr, size);
   } else {
-    result = find_sat(str);
+    result = find_sat(str, arptr, size);
   }
   return result;
 }
@@ -176,7 +183,7 @@ int sat_from_line(sat_t *sat, char *str) {
   char *untrim;
   double orbit = strtod(str, &untrim);
   if (orbit >= 1) {
-    char name[strlen(untrim)+1];
+    char name[strlen(untrim) + 1];
     strcpy(name, untrim);
     trim_space_both(name);
     sat->orbit = orbit;
@@ -205,27 +212,41 @@ int sats_from_file(sat_t (*arptr)[], char *filename) {
   return size;
 }
 
-void show_satellites() {
-  size_t lsats = sizeof(sats) / sizeof(sat_t);
-  sat_t tmp;
+void show_satellites(sat_t (*arptr)[], int size) {
+  if (arptr == NULL) {
+    size = sizeof(sats) / sizeof(sat_t);
+    arptr = &sats;
+  }
+  sat_t *ar = *arptr;
   int i;
-  for (i = 0; i < lsats; i++) {
-    tmp = sats[i];
+  for (i = 0; i < size; i++) {
     if (i != 0) {
       printf("\n");
     }
-    printf("{%.1f, '%s'}", tmp.orbit, tmp.name);
+    printf("%6.1f '%s'", ar[i].orbit, ar[i].name);
   }
 }
 
-int cmpsatp(const void *sat0, const void *sat1) {
+int asc_cmpsatp(const void *sat0, const void *sat1) {
   sat_t x, y;
   x = *(sat_t *)sat0;
   y = *(sat_t *)sat1;
   if (x.orbit == y.orbit) {
     return 0;
   } else if (x.orbit > y.orbit) {
-    return -1;
+    return 1;
   }
-  return 1;
+  return -1;
+}
+
+int desc_cmpsatp(const void *sat0, const void *sat1) {
+  sat_t x, y;
+  x = *(sat_t *)sat0;
+  y = *(sat_t *)sat1;
+  if (x.orbit == y.orbit) {
+    return 0;
+  } else if (x.orbit < y.orbit) {
+    return 1;
+  }
+  return -1;
 }
