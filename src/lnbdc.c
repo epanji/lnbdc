@@ -64,11 +64,11 @@ sat_t find_sat_by_name(str_t name, sat_t (*arptr)[], int size) {
   size_t lname = strlen(name);
   int i;
   for (i = 0; i < size; i++) {
-    tmp = sats[i];
-    if ((strncasecmp(tmp.name, name, lname)) == 0) {
+    tmp = ar[i];
+    if (strncasecmp(tmp.name, name, lname) == 0) {
       result = tmp;
       break;
-    } else if ((strncasecmp(tmp.name, name, 1)) == 0) {
+    } else if (strncasecmp(tmp.name, name, 1) == 0) {
       result = tmp;
     }
   }
