@@ -76,8 +76,8 @@ int test_4() {
 int test_5() {
   char a[16];
   char b[16];
-  sprintf(a, "%.6f",  deg_to_rad(1));
-  sprintf(b, "%.6f",  deg_to_rad(1.1));
+  sprintf(a, "%.6f", deg_to_rad(1));
+  sprintf(b, "%.6f", deg_to_rad(1.1));
   printf("a = %s\n", a);
   printf("b = %s\n", b);
   if (strcmp(a, "0.017453") != 0) return 1;
@@ -296,23 +296,26 @@ int test_19() {
                 "120    dua\n"
                 "130    tiga   \n");
   fclose(file);
-  sat_t (*arrptr)[] = malloc(3*(sizeof(sat_t)));
-  int size = sats_from_file(arrptr, ftmp);
-  sat_t *arr = *arrptr;
+  sat_t(*arptr)[] = malloc(3 * sizeof(sat_t));
+  int size = sats_from_file(arptr, ftmp);
+  sat_t *arr = *arptr;
   for (int i = 0; i < size; i++) {
-    printf("%s\n",arr[i].name);
+    printf("%s\n", arr[i].name);
   }
   if (strcmp("satu", arr[0].name) != 0) return 1;
   if (strcmp("dua", arr[1].name) != 0) return 1;
   if (strcmp("tiga", arr[2].name) != 0) return 1;
-  free(arrptr);
+  sat_t x = str_to_sat("dua", arptr, size);
+  sat_t y = str_to_sat("120", arptr, size);
+  if (strcmp(x.name, y.name) != 0) return 1;
+  free(arptr);
   return 0;
 }
 
 int main(int argc, char *argv[]) {
   int test = 1;
   if (argc > 1) {
-    switch(atoi(argv[1])) {
+    switch (atoi(argv[1])) {
     case 1:
       test = test_1();
       break;
