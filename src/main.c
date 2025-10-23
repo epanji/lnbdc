@@ -37,6 +37,8 @@ int main(int argc, char *argv[]) {
   int c;
   int digit_optind = 0;
   int size = 0;
+  int help = 0;
+  int list = 0;
   sat_t(*arptr)[] = malloc(1024 * sizeof(sat_t));
   while (1) {
     int this_option_optind = optind ? optind : 1;
@@ -51,18 +53,11 @@ int main(int argc, char *argv[]) {
     }
     switch (c) {
     case 'h':
-      show_help();
-      free(arptr);
-      return 0;
+      help = 1;
+      break;
     case 'l':
-      if (size != 0) {
-        show_satellites(arptr, size);
-      } else {
-        show_satellites(NULL, 0);
-      }
-      printf("\n");
-      free(arptr);
-      return 0;
+      list = 1;
+      break;
     case 'd':
       if (optarg != NULL) {
         size = sats_from_file(arptr, optarg);
@@ -77,6 +72,21 @@ int main(int argc, char *argv[]) {
       free(arptr);
       return 1;
     }
+  }
+  if (help != 0) {
+    show_help();
+    free(arptr);
+    return 0;
+  }
+  if (list != 0) {
+    if (size != 0) {
+      show_satellites(arptr, size);
+    } else {
+      show_satellites(NULL, 0);
+    }
+    printf("\n");
+    free(arptr);
+    return 0;
   }
   int i = 0;
   int wo_argc = 1 + argc - optind;
